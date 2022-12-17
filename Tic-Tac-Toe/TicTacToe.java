@@ -38,6 +38,12 @@ public class TicTacToe {
             while(playerPositions.contains(player_position) || cpuPositions.contains(playerPositions) || cpuPositions.contains(player_position)){ //to check that the string is being entered on the correct position
                 System.out.println("Position taken! Please choose a different position"); //warn the user they cant enter in a taken position
                 player_position = scan.nextInt();//for user to enter another position that is empty
+                /* Prevent user from printing on top of CPU */
+                while(playerPositions.contains(player_position))
+                {
+                    System.out.println("Position taken! Please select a different position:");
+                    player_position = scan.nextInt();
+                }
             }
         //System.out.println(player_position);//output the position of where it is placed
 
@@ -46,16 +52,19 @@ public class TicTacToe {
             String result = verifyWinner();//to check who won
             if(result.length() > 0) //check for the player
                 {
+                    printBoardGame(boardGame);//print the board once finished
                     System.out.println(result);
                     break;
                 }
-
+            
+            //for CPU control
             Random r = new Random();
             int CPU_position = r.nextInt(9) + 1; //get the position from 1 to 9
             while(playerPositions.contains(CPU_position) || cpuPositions.contains(CPU_position)) //similar to the previous loop, but for CPU
             {
                 CPU_position = r.nextInt(9) + 1; //force the cpu to pick another position to enter
             }
+
             updateBoard(boardGame, CPU_position, "CPU");// used for CPU turn
 
             printBoardGame(boardGame);//needed once more to see the newly added position that has been updated
@@ -63,9 +72,11 @@ public class TicTacToe {
             result = verifyWinner();//to check who won
                 if(result.length() > 0) //check for the cpu
                 {
+                    printBoardGame(boardGame); //print the board once finished
                     System.out.println(result);
                     break;
                 }
+            
             //System.out.println(result);
             //scan.close();
         }
